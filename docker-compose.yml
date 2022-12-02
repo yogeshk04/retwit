@@ -1,24 +1,46 @@
 version: '3.4'
 
 services:
-  backend:
-    image: api
-    build:
-      context: .
-      dockerfile: ./backend/Dockerfile
-    ports:
-      - 8080:8080
-  frontend:
-    image: web
-    build:
-      context: .
-      dockerfile: ./frontend/Dockerfile
-    ports:
-      - 4200:4200
+  # MySql database service
   db:
     image: mysql
-    build:
-      context: .
-      dockerfile: ./backend/Dockerfile
+    restart: always
+    container_name: mysql-db
+    environment:
+      - MYSQL_ROOT_PASSWORD= 'root'
+      - MYSQL_DATABASE= 'spring-twitter-clone'
+    ports:
+    - 3306:3306
+    volumes:
+      - ./dump.sql:/docker-entrypoint-initdb.d/dump.sql
+
+  # MySql Web UI using php my admin
+  php-my-admin:
+    image: phpmyadmin
+    restart: always
+    container_name: php-my-admin
+    ports:
+      - 8081:80
+
+  # Backend spring boot application
+  backend:
+    build: ./backend
+    container_name: sb-api
+    environment:
+      MYSQL_HOST: 'db'
+      MYSQL_USER: 'root'
+      MYSQL_PASSWORD: 'root'
+      MYSQL_DATABASE: 'spring-twitter-clone'
     ports:
       - 8080:8080
+    links:
+      - db
+
+  # Frontend angular application
+  frontend:
+    build: ./frontend
+    container_name: ng-webapp
+    ports:
+      - 4200:4200
+    links:
+      - backend

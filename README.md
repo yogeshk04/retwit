@@ -1,43 +1,46 @@
 
 # Technologies
-Spring Boot 2.7.0
+- Spring Boot 2.7.0
+- Angular 14
+- MySql 8.0
 
-Angular 14
+# Run locally
+## Backend
 
-MySql 8.0
-# Features
+    Requirement - JDK 17 and maven 3.8.6 should be installed
+    ```
+    cd backend
+    mvn clean install
+    java -jar target/twitter-clone-0.0.1-SNAPSHOT.jar
+    ```
 
-# Home page
-User can view all posts stored in database, create new tweet via tweet form, retweet, reply or quote via overlay forms, like and bookmark a tweet.
+## frontend
+    Requirements - Latest node and npm install. Angular cli 14
+    ```
+    > cd frontend
+    > npm install
+    > ng serve
+    ```
+    Open in browser http://localhots:4200
 
-# Post Page
-This page opens when user clicks on a post. Here user can view the post and all replies to it and create a reply via reply form.
+# Docker   
+## Frontend
 
-# Profile Page
-In this page User can update his personal information such as name, bio, location, personal website and birthdate. 
-Also, He/She can upload a profile picture and a banner picture. Additionally, user can view his/her tweets, replies, retweets and liked tweets via respective tabs.
+    ```
+    > cd frontend
+    > ng build --configuration production --aot
+    > docker build -t frontend .
+    > docker run -p 8080:80 --name webapp -d frontend
+    ```
+    Access web application using url: http://localhost:8080/
 
-# Bookmarks Page
-Here user can view his bookmarked tweets.
+## Backend
+    ```
+    > cd backend
+    
+    ```
+    Access web application using url: 
 
-# Swagger
-![Swagger 1](./backend/swagger/3.jpg)
 
-
-### Run locally
-## Run backend
-Requirement - JDK 17 and maven 3.8.6 should be installed
-```
-cd backend
-mvn clean install
-java -jar target/twitter-clone-0.0.1-SNAPSHOT.jar
-```
-
-## Run frontend
-Requirements - Latest node and npm install. Angular cli 14
-```
-> cd frontend
-> npm install
-> ng serve
-```
-open in browser http://localhots:4200
+## Swager url
+http://localhost:8080/swagger-ui.html
