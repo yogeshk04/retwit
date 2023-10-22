@@ -1,10 +1,12 @@
 # Build Stage
 FROM maven:3.8.5-openjdk-17-slim AS build
-COPY pom.xml /app/
+WORKDIR /app
+COPY pom.xml .
 COPY src /app/src
-RUN mvn -DskipTests -f /app/pom.xml clean package
+RUN mvn -DskipTests clean package
 
 # Run Stage
-FROM openjdk:17
+FROM openjdk:17.0-jdk-slim
+WORKDIR /app
 COPY --from=build /app/target/retwit*.jar /app/app.jar
-ENTRYPOINT ["java", "-XX:+UnlockExperimentalVMOptions", "-XX:+UseCGroupMemoryLimitForHeap","-Djava.security.egd=file:/dev/./urandom","-jar","/app/app.jar"]
+ENTRYPOINT ["java", "-Xms512m", "-Xmx1024m", "-jar", "/app/app.jar"]

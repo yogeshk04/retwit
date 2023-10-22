@@ -1,18 +1,23 @@
-version: '3.4'
+version: '3.7'
 
 services:
   # MySql database service
-  db:
-    image: mysql
+  mysqldb:
+    image: "mysql:8.0"
     restart: always
     container_name: mysql-db
-    environment:
-      - MYSQL_ROOT_PASSWORD= 'root'
-      - MYSQL_DATABASE= 'spring-twitter-clone'
     ports:
     - 3306:3306
+    networks:
+      - twitter-net
+    environment:
+      MYSQL_DATABASE: spring-twitter-clone
+      MYSQL_USER: yogesh_one
+      MYSQL_PASSWORD: Yogesh_pw
+      MYSQL_ROOT_PASSWORD: Yogesh_Rpw    
     volumes:
       - ./dump.sql:/docker-entrypoint-initdb.d/dump.sql
+    
 
   # MySql Web UI using php my admin
   php-my-admin:
@@ -21,26 +26,38 @@ services:
     container_name: php-my-admin
     ports:
       - 8081:80
+    environment:
+      - PMA_ARBITRARY=1
+    networks:
+      - twitter-net
 
   # Backend spring boot application
   backend:
     build: ./backend
-    container_name: sb-api
-    environment:
-      MYSQL_HOST: 'db'
-      MYSQL_USER: 'root'
-      MYSQL_PASSWORD: 'root'
-      MYSQL_DATABASE: 'spring-twitter-clone'
+    container_name: api-container
+    restart: always
     ports:
       - 8080:8080
-    links:
-      - db
+    networks:
+      - twitter-net
+    environment:
+      - spring.datasource.url=jdbc:mysql://mysqldb:3306/spring-twitter-clone?allowPublicKeyRetrieval=true
+    depends_on:
+      - mysqldb
+    volumes:
+      - .m2:/root/.m2
+    
 
   # Frontend angular application
   frontend:
     build: ./frontend
-    container_name: ng-webapp
+    container_name: webapp-container
     ports:
       - 4200:4200
     links:
       - backend
+    networks:
+      - twitter-net
+    
+networks:
+  twitter-net:
