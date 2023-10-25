@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mysql-deployment
+  name: mysqldeployment
 spec:
   replicas: 1
   selector:
@@ -42,9 +42,12 @@ spec:
             - name: mysql-persistent-storage
               mountPath: /var/lib/mysql
           resources:
-          limits:
-            memory: "128Mi"
-            cpu: "500m"
+            limits:
+                memory: "512Mi"  # Adjust as needed
+                cpu: "500m"      # Adjust as needed
+            requests:
+              memory: "256Mi"  # Adjust as needed
+              cpu: "250m"      # Adjust as needed
       volumes:
         - name: mysql-persistent-storage
           persistentVolumeClaim:
