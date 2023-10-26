@@ -25,3 +25,9 @@ Stage 3: Create fronend application deployment
 	- Create Frontend deployment using the image in above step
 	- Create service for fronend deployment
 		* in case of Docker Desktop - Service type should be LoadBalancer. So that it can be accesible using localhost from the host machine.
+	
+Stage 4: Configure ingress controller
+	- Install NGINX. Reference link - https://kubernetes.github.io/ingress-nginx/deploy/#docker-desktop
+	- Change the domain name into host files
+	- on windows C:\Windows\System32\drivers\etc\hosts
+	- on linux/mac /etc/hosts
