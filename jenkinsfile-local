@@ -3,7 +3,7 @@ pipeline {
     environment {
         GIT_COMMAND = '"C:\\Program Files\\Git\\bin\\bash.exe"'
         KUBECTL_COMMAND = 'kubectl'
-        KUBECONFIG_PATH = 'C:\\Users\\diTrinity_112\\.kube\\config'
+        KUBECONFIG_PATH = 'C:\\Users\\Meenakshi Ulhas\\.kube\\config'
         MANIFESTS_PATH = 'C:\\ProgramData\\Jenkins\\.jenkins\\workspace\\local-deployment\\manifest'
         BE_DOCKER_FILE = 'C:\\ProgramData\\Jenkins\\.jenkins\\workspace\\local-deployment\\backend'
         FE_DOCKER_FILE = 'C:\\ProgramData\\Jenkins\\.jenkins\\workspace\\local-deployment\\frontend'
@@ -25,7 +25,7 @@ pipeline {
             steps {
                 script {
                     dir("${env.BE_DOCKER_FILE}") {
-                        bat "docker build -t yogeshk04/backend ."
+                        bat "docker build -t ulhasmahajan/backend:v3 ."
                     }
                 }
             }
@@ -35,7 +35,7 @@ pipeline {
             steps {
                 script {
                     dir("${env.FE_DOCKER_FILE}") {
-                        bat "docker build -t yogeshk04/frontend ."
+                        bat "docker build -t ulhasmahajan/frontend:v3 ."
                     }
                 }
             }
@@ -54,8 +54,8 @@ pipeline {
         stage('Stage 5: Docker push images to DockerHub') {
             steps {
                 script {
-                    bat "docker push yogeshk04/backend"
-                    bat "docker push yogeshk04/frontend"
+                    bat "docker push ulhasmahajan/backend:v3"
+                    bat "docker push ulhasmahajan/frontend:v3"
                 }
             }
         }
