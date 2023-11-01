@@ -44,7 +44,9 @@ pipeline {
         stage('Stage 4: Docker login') {
             steps {
                 script {
-                    bat "docker login"
+                    withDockerRegistry(credentialsId: env.DOCKER_REGISTRY_CREDENTIALS_ID, url: env.DOCKER_REGISTRY_URL) {
+                        // Docker login is handled automatically
+                    }
                 }
             }
         }
