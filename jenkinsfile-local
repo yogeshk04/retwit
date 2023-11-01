@@ -1,0 +1,42 @@
+pipeline {
+    agent any
+    environment {
+        GIT_COMMAND = '"C:\\Program Files\\Git\\bin\\bash.exe"'
+        KUBECTL_COMMAND = 'kubectl'
+        KUBECONFIG_PATH = 'C:\\Users\\diTrinity_112\\.kube\\config'
+        MANIFESTS_PATH = 'C:\\ProgramData\\Jenkins\\.jenkins\\workspace\\local-deployment\\manifest'
+    }
+    stages {
+        stage('Stage 1: Clone Repository') {
+            steps {
+                script {
+                    git 'https://github.com/yogeshk04/retwit.git'
+                }
+            }
+        }
+
+        stage('Stage 2: Deploy to Kubernetes cluster') {
+            steps {
+                script {
+                    // Set KUBECONFIG for kubectl
+                    withEnv(["KUBECONFIG=${env.KUBECONFIG_PATH}"]) {
+                       dir("${env.MANIFESTS_PATH}") {
+                            bat "${env.KUBECTL_COMMAND} apply -f ."
+                        }
+                    }
+                }
+            }
+        }
+
+        // Add more stages as needed for your build process
+    }
+
+    post {
+        success {
+            echo 'Build successful!'
+        }
+        failure {
+            echo 'Build failed!'
+        }
+    }
+}
