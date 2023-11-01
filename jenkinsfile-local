@@ -45,7 +45,6 @@ pipeline {
             steps {
                 script {
                     bat "docker login"
-                    }
                 }
             }
         }
